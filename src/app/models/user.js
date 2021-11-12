@@ -5,6 +5,7 @@ const userSchema = new Schema(
   {
     name: { type: String, required: true },
     birthday: { type: Date, required: true },
+    gender: { type: Boolean, required: true },
     phone: { type: String, maxlength: 10, required: false },
     avatar: { type: String, required: false },
     bio: { type: String, required: false },
@@ -13,7 +14,7 @@ const userSchema = new Schema(
     youtube: { type: String, required: false },
     email: { type: String, required: true },
     password: { type: String, required: true },
-    roleId: { type: String, required: true },
+    role: { type: String, required: true },
   },
   { timestamps: true }
 );

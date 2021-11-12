@@ -4,7 +4,7 @@ class UserController {
   getAllUsers(req, res, next) {
     User.find()
       .then((users) => {
-        res.json(users);
+        res.status(200).json(users);
       })
       .catch(next);
   }
@@ -12,15 +12,16 @@ class UserController {
   getUserById(req, res, next) {
     User.findById({ _id: req.params._id })
       .then((user) => {
-        res.json(user);
+        res.status(200).json(user);
       })
       .catch(next);
   }
   //GET Users by RoleId
-  getUsersByRoleId(req, res, next) {
-    User.find({ roleId: req.params.roleId })
+  getUsersByRole(req, res, next) {
+    const role = req.query.role;
+    User.find({ role: new RegExp(q, 'i') })
       .then((users) => {
-        res.json(users);
+        res.status(200).json(users);
       })
       .catch(next);
   }
@@ -29,14 +30,15 @@ class UserController {
     const newUser = new User({
       name: req.body.name,
       birthday: req.body.birthday,
+      gender: req.body.gender,
       email: req.body.email,
       password: req.body.password,
-      roleId: req.body.roleId,
+      role: req.body.role,
     });
     newUser
       .save()
       .then((user) => {
-        res.json({ message: 'Created new User successfully!' }, user);
+        res.status(200).json(user);
       })
       .catch(next);
   }
@@ -48,6 +50,7 @@ class UserController {
         $set: {
           name: req.body.name,
           birthday: req.body.birthday,
+          gender: req.body.gender,
           phone: req.body.phone,
           avatar: req.body.avatar,
           bio: req.body.bio,
@@ -58,7 +61,7 @@ class UserController {
       }
     )
       .then((user) => {
-        res.json({ message: 'Updated User successfully!' }, user);
+        res.status(200).json(user);
       })
       .catch(next);
   }
@@ -66,7 +69,7 @@ class UserController {
   deleteUser(req, res, next) {
     User.deleteOne({ _id: req.params._id })
       .then(() => {
-        res.json({ message: 'Delete User successfully!' });
+        res.status(200).json({ message: 'Delete User successfully!' });
       })
       .catch(next);
   }

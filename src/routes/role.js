@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+
 const roleController = require('../app/controllers/role-controller');
 
 //nên đưa path trống / xuống dưới cùng để ko bị ăn function tương ứng
