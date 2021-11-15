@@ -1,10 +1,21 @@
 const Course = require('../models/course');
+const User = require('../models/user');
+const Lession = require('../models/lession');
+
 class CourseController {
   //GET all Courses
   getAllCourses(req, res, next) {
     Course.find()
       .then((courses) => {
-        res.json(courses);
+        res.status(200).json(courses);
+      })
+      .catch(next);
+  }
+  //GET Course by Id
+  getCourseById(req, res, next) {
+    Course.findById({ _id: req.params._id })
+      .then((course) => {
+        res.status(200).json(course);
       })
       .catch(next);
   }
@@ -12,23 +23,32 @@ class CourseController {
   getCourseBySlug(req, res, next) {
     Course.findOne({ slug: req.params.slug })
       .then((course) => {
-        res.json(course);
+        res.status(200).json(course);
       })
       .catch(next);
   }
   //POST a new Course
   createCourse(req, res, next) {
-    const newCourse = new Course({
-      belongToId: req.body.belongToId,
-      belongTo: req.body.belongTo,
-      name: req.body.name,
-      description: req.body.description,
-      image: req.body.image,
-    });
-    newCourse
-      .save()
-      .then((course) => {
-        res.json({ message: 'Created new Course successfully!' }, course);
+    const user = {};
+    User.findById({ _id: req.body.belongToId })
+      .select(
+        'name birthday gender avatar bio phone facebook instagram youtube'
+      )
+      .then((user) => {
+        user = user;
+        const newCourse = new Course({
+          belongToId: req.body.belongToId,
+          belongTo: user,
+          name: req.body.name,
+          description: req.body.description,
+          image: req.body.image,
+        });
+        newCourse
+          .save()
+          .then((course) => {
+            res.status(200).json(course);
+          })
+          .catch(next);
       })
       .catch(next);
   }
@@ -45,7 +65,7 @@ class CourseController {
       }
     )
       .then((course) => {
-        res.json({ message: 'Updated Course successfully!' }, course);
+        res.status(200).json(course);
       })
       .catch(next);
   }
@@ -60,7 +80,7 @@ class CourseController {
       }
     )
       .then((course) => {
-        res.json({ message: 'Update rating of Course successfully!' }, course);
+        res.status(200).json(course);
       })
       .catch(next);
   }
@@ -75,7 +95,7 @@ class CourseController {
       }
     )
       .then((course) => {
-        res.json({ message: 'Update members of Course successfully!' }, course);
+        res.status(200).json(course);
       })
       .catch(next);
   }
@@ -83,7 +103,15 @@ class CourseController {
   deleteCourse(req, res, next) {
     Course.deleteOne({ _id: req.params._id })
       .then(() => {
-        res.json({ message: 'Delete Course successfully!' });
+        res.status(200).json({ message: 'Delete Course successfully!' });
+      })
+      .catch(next);
+  }
+  //GET Lessions by CourseId
+  getLessionsByCourseId(req, res, next) {
+    Lession.find({ belongToId: req.query.courseId })
+      .then((lessions) => {
+        res.status(200).json(lessions);
       })
       .catch(next);
   }
