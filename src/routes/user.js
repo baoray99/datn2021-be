@@ -7,7 +7,7 @@ router.post('/', userController.createUser);
 router.put('/:_id', userController.updateUser);
 router.delete('/:_id', userController.deleteUser);
 router.get('/:_id', userController.getUserById);
-router.get('/?_role=', userController.getUsersByRole);
+router.get('/', userController.getUsersByRole);
 router.get('/', userController.getAllUsers);
 
 module.exports = router;

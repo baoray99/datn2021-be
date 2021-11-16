@@ -19,7 +19,7 @@ class UserController {
   //GET Users by RoleId
   getUsersByRole(req, res, next) {
     const role = req.query.role;
-    User.find({ role: new RegExp(q, 'i') })
+    User.find({ role: role })
       .then((users) => {
         res.status(200).json(users);
       })

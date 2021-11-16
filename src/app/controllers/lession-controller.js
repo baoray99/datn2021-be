@@ -1,5 +1,5 @@
 const Lession = require('../models/lession');
-
+const Course = require('../models/course');
 class LessionController {
   //GET all Lessions
   getAllLessions(req, res, next) {

@@ -9,8 +9,8 @@ router.put('/:_id/rating', courseController.updateRatingOfCourse);
 router.put('/:_id/members', courseController.updateMembersOfCourse);
 router.put('/:_id', courseController.updateCourse);
 router.delete('/:_id', courseController.deleteCourse);
-router.get('/?_courseId=', courseController.getLessionsByCourseId);
 router.get('/:slug', courseController.getCourseBySlug);
+router.get('/', courseController.getLessionsByCourseId);
 router.get('/', courseController.getAllCourses);
 
 module.exports = router;
