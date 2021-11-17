@@ -9,5 +9,6 @@ router.post('/', lessionController.createLession);
 router.put('/:_id', lessionController.updateLession);
 router.delete('/:_id', lessionController.deleteLession);
 router.get('/', lessionController.getAllLessions);
+router.get('/', lessionController.getLessionsByCourseId);
 
 module.exports = router;

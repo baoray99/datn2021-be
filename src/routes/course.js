@@ -10,6 +10,5 @@ router.put('/:_id', courseController.updateCourse);
 router.delete('/:_id', courseController.deleteCourse);
 router.get('/:slug', courseController.getCourseBySlug);
 router.get('/', courseController.getAllCourses);
-router.get('/', courseController.getLessionsByCourseId);
 
 module.exports = router;

@@ -92,13 +92,5 @@ class CourseController {
       })
       .catch(next);
   }
-  //GET Lessions by CourseId
-  getLessionsByCourseId(req, res, next) {
-    Lession.find({ belongToId: req.query.courseId })
-      .then((lessions) => {
-        res.status(200).json(lessions);
-      })
-      .catch(next);
-  }
 }
 module.exports = new CourseController();
