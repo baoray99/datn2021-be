@@ -6,7 +6,6 @@ const auth = require('../app/middleware/auth');
 //course
 router.post('/', courseController.createCourse);
 router.put('/:_id/rating', courseController.updateRatingOfCourse);
-router.put('/:_id/members', courseController.updateMembersOfCourse);
 router.put('/:_id', courseController.updateCourse);
 router.delete('/:_id', courseController.deleteCourse);
 router.get('/:slug', courseController.getCourseBySlug);
