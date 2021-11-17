@@ -6,9 +6,10 @@ const authController = require('../app/controllers/auth-controller');
 router.post('/register', authController.registerUser);
 router.post('/login', authController.loginUser);
 router.put('/:_id', authController.updateUser);
+router.put('/', authController.updateRegisteredCourses);
 router.delete('/:_id', authController.deleteUser);
 router.get('/:_id', authController.getUserById);
-router.get('/', authController.getUsersByRole);
 router.get('/', authController.getAllUsers);
+router.get('/', authController.getUsersByRole);
 
 module.exports = router;

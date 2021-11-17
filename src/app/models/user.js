@@ -12,6 +12,7 @@ const userSchema = new Schema(
     facebook: { type: String, required: false },
     instagram: { type: String, require: false },
     youtube: { type: String, required: false },
+    registeredCourses: { type: Array, required: false },
     email: { type: String, required: true },
     password: { type: String, required: true },
     role: { type: String, required: true },

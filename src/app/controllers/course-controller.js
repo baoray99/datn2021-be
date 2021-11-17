@@ -84,21 +84,6 @@ class CourseController {
       })
       .catch(next);
   }
-  //PUT members of Course
-  updateMembersOfCourse(req, res, next) {
-    Course.updateOne(
-      { _id: req.params._id },
-      {
-        $set: {
-          members: req.body.members,
-        },
-      }
-    )
-      .then((course) => {
-        res.status(200).json(course);
-      })
-      .catch(next);
-  }
   //DELETE Course
   deleteCourse(req, res, next) {
     Course.deleteOne({ _id: req.params._id })

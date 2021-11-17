@@ -1,6 +1,7 @@
 const express = require('express');
 const lessionController = require('../app/controllers/lession-controller');
 const router = express.Router();
+const auth = require('../app/middleware/auth');
 
 //nên đưa path trống / xuống dưới cùng để ko bị ăn function tương ứng
 
