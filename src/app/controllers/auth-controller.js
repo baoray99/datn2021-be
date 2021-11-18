@@ -47,9 +47,7 @@ class AuthController {
               const token = jwt.sign({ name: user.name }, process.env.JWT_KEY, {
                 expiresIn: '365d',
               });
-              res
-                .status(200)
-                .json({ message: 'Login successfully!', user, token });
+              res.status(200).json({ message: 'Login successfully!', token });
             } else {
               res.status(400).json({ message: 'Password invalid!' });
             }
