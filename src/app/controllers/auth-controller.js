@@ -63,6 +63,9 @@ class AuthController {
     const token = req.header('Authorization').replace('Bearer ', '');
     const userDecode = jwtDecode(token);
     User.findById({ _id: userDecode._id })
+      .select(
+        '_id name birthday gender avatar phone bio facebook instagram youtube role'
+      )
       .then((user) => {
         res.status(200).json(user);
       })
