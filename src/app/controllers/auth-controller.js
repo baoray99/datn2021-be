@@ -2,6 +2,7 @@ const User = require('../models/user');
 const Course = require('../models/course.js');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const jwtDecode = require('jwt-decode');
 class AuthController {
   //Register User
   registerUser(req, res, next) {
@@ -44,15 +45,26 @@ class AuthController {
               res.json({ error: err });
             }
             if (result) {
-              const token = jwt.sign({ name: user.name }, process.env.JWT_KEY, {
+              const token = jwt.sign({ _id: user._id }, process.env.JWT_KEY, {
                 expiresIn: '365d',
               });
+              //sign _id de sau nay decode token se tra ve id user
               res.status(200).json({ message: 'Login successfully!', token });
             } else {
               res.status(400).json({ message: 'Password invalid!' });
             }
           });
         }
+      })
+      .catch(next);
+  }
+  //GET me
+  getMe(req, res, next) {
+    const token = req.header('Authorization').replace('Bearer ', '');
+    const userDecode = jwtDecode(token);
+    User.findById({ _id: userDecode._id })
+      .then((user) => {
+        res.status(200).json(user);
       })
       .catch(next);
   }

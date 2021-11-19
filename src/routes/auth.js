@@ -8,6 +8,7 @@ router.post('/login', authController.loginUser);
 router.put('/:_id', authController.updateUser);
 router.put('/', authController.updateRegisteredCourses);
 router.delete('/:_id', authController.deleteUser);
+router.get('/me', authController.getMe);
 router.get('/:_id', authController.getUserById);
 router.get('/', authController.getAllUsers);
 router.get('/', authController.getUsersByRole);
