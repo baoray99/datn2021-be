@@ -49,7 +49,7 @@ class AuthController {
                 expiresIn: '365d',
               });
               //sign _id de sau nay decode token se tra ve id user
-              res.status(200).json({ message: 'Login successfully!', token });
+              res.status(200).json(token);
             } else {
               res.status(400).json({ message: 'Password invalid!' });
             }
