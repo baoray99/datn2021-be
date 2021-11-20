@@ -8,9 +8,12 @@ require('./db/db');
 const express = require('express');
 const app = express();
 const compression = require('compression');
+const cors = require('cors');
 const port = process.env.PORT;
 const route = require('./routes');
 
+//fix cors
+app.use(cors());
 //improve performance
 app.use(
   compression({
