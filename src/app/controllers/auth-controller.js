@@ -17,8 +17,6 @@ class AuthController {
             }
             const newUser = new User({
               name: req.body.name,
-              birthday: req.body.birthday,
-              gender: req.body.gender,
               email: req.body.email,
               password: hashedPass,
               role: req.body.role,

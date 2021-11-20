@@ -4,10 +4,14 @@ const Schema = mongoose.Schema;
 const userSchema = new Schema(
   {
     name: { type: String, required: true },
-    birthday: { type: Date, required: true },
-    gender: { type: Boolean, required: true },
+    birthday: { type: Date, required: false },
+    gender: { type: Boolean, required: false },
     phone: { type: String, maxlength: 10, required: false },
-    avatar: { type: String, required: false },
+    avatar: {
+      type: String,
+      required: false,
+      default: 'https://www.silcube.com/hubfs/avatars/non-avatar.webp',
+    },
     bio: { type: String, required: false },
     facebook: { type: String, required: false },
     instagram: { type: String, require: false },
