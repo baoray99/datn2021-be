@@ -19,6 +19,14 @@ class CourseController {
       })
       .catch(next);
   }
+  //GET courses by teacherId
+  getCourseByTeacherId(req, res, next) {
+    Course.find({ belongToId: req.params.teacherId })
+      .then((courses) => {
+        res.status(200).json(courses);
+      })
+      .catch(next);
+  }
   //GET Course by slug
   getCourseBySlug(req, res, next) {
     Course.findOne({ slug: req.params.slug })

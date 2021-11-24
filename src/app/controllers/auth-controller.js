@@ -89,6 +89,9 @@ class AuthController {
   getUsersByRole(req, res, next) {
     const role = req.query.role;
     User.find({ role: role })
+      .select(
+        '_id name birthday gender avatar phone bio facebook instagram youtube role'
+      )
       .then((users) => {
         res.status(200).json(users);
       })
