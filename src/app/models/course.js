@@ -8,7 +8,12 @@ const courseSchema = new Schema(
     belongTo: { type: Object, required: true },
     name: { type: String, required: true },
     description: { type: String, required: false },
-    image: { type: String, required: false },
+    image: {
+      type: String,
+      required: false,
+      default:
+        'https://scontent.fdad2-1.fna.fbcdn.net/v/t39.30808-6/257381852_2063613163807356_6047570001632965703_n.jpg?_nc_cat=107&_nc_rgb565=1&ccb=1-5&_nc_sid=730e14&_nc_ohc=RAbrfAuy2i8AX9BAPz4&_nc_ht=scontent.fdad2-1.fna&oh=930fc5be40cd09a5cbe3bcd9d1b3a824&oe=61A3430E',
+    },
     slug: {
       type: String,
       slug: 'name',
