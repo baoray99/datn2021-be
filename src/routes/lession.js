@@ -8,7 +8,7 @@ const auth = require('../app/middleware/auth');
 router.post('/', lessionController.createLession);
 router.put('/:_id', lessionController.updateLession);
 router.delete('/:_id', lessionController.deleteLession);
-router.get('/', lessionController.getAllLessions);
 router.get('/', lessionController.getLessionsByCourseId);
+router.get('/', lessionController.getAllLessions);
 
 module.exports = router;
