@@ -11,8 +11,8 @@ router.put('/:_id', courseController.updateCourse);
 router.delete('/:_id', courseController.deleteCourse);
 router.get('/:slug', commentController.getCommentsByLessionId);
 router.get('/:slug', courseController.getCourseBySlug);
-router.get('/:teacherId', courseController.getCourseByTeacherId);
-router.get('/:_id', courseController.getCourseById);
+router.get('/teacher/:teacherId', courseController.getCourseByTeacherId);
+router.get('/id/:_id', courseController.getCourseById);
 router.get('/', courseController.getAllCourses);
 
 module.exports = router;
