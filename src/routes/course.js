@@ -9,7 +9,7 @@ router.post('/', courseController.createCourse);
 router.put('/:_id/rating', courseController.updateRatingOfCourse);
 router.put('/:_id', courseController.updateCourse);
 router.delete('/:_id', courseController.deleteCourse);
-router.get('/:slug', commentController.getCommentsByLessionId);
+router.get('/:slug/comments', commentController.getCommentsByLessionId);
 router.get('/:slug', courseController.getCourseBySlug);
 router.get('/teacher/:teacherId', courseController.getCourseByTeacherId);
 router.get('/id/:_id', courseController.getCourseById);
