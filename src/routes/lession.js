@@ -9,8 +9,8 @@ const lession = require('../app/models/lession');
 router.post('/', lessionController.createLession);
 router.put('/:_id', lessionController.updateLession);
 router.delete('/:_id', lessionController.deleteLession);
-router.get('/:_id', lessionController.getLessionById);
 router.get('/', lessionController.getLessionsByCourseId);
+router.get('/:_id', lessionController.getLessionById);
 router.get('/', lessionController.getAllLessions);
 
 module.exports = router;
