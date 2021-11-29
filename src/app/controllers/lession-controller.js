@@ -9,6 +9,14 @@ class LessionController {
       })
       .catch(next);
   }
+  //GET Lession by Id
+  getLessionById(req, res, next) {
+    Lession.findById({ _id: req.params._id })
+      .then((lession) => {
+        res.status(200).json(lession);
+      })
+      .catch(next);
+  }
   //GET Lessions by CourseId
   getLessionsByCourseId(req, res, next) {
     Lession.find({ belongToId: req.query.courseId })
