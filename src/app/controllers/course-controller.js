@@ -35,6 +35,20 @@ class CourseController {
       })
       .catch(next);
   }
+  //Get popular course
+  getPopularCourse(req, res, next) {
+    const query = {};
+    // sort in descending (-1) order by length
+    const sort = { members: -1 };
+    const limit = 10;
+    Course.find(query)
+      .sort(sort)
+      .limit(limit)
+      .then((courses) => {
+        res.status(200).json(courses);
+      })
+      .catch(next);
+  }
   //POST a new Course
   createCourse(req, res, next) {
     const user = {};
