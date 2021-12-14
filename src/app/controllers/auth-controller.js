@@ -133,29 +133,25 @@ class AuthController {
   updateRegisteredCourses(req, res, next) {
     Course.findOne({ _id: req.body.courseId })
       .then(() => {
-        Course.updateOne(
-          { _id: req.body.courseId },
-          {
-            $inc: {
-              members: 1,
-            },
-          }
-        )
-          .then((course) => {
+        Course.findByIdAndUpdate(
+          req.body.courseId,
+          { $inc: { members: 1 } },
+          { returnOriginal: false },
+          (err, doc) => {
             User.updateOne(
               { _id: req.body.userId },
               {
                 $push: {
-                  registeredCourses: course,
+                  registeredCourses: doc,
                 },
               }
             )
-              .then((user) => {
-                res.status(200).json(user);
+              .then((response) => {
+                res.status(200).json(response);
               })
               .catch(next);
-          })
-          .catch(next);
+          }
+        );
       })
       .catch(next);
   }
