@@ -97,6 +97,15 @@ class AuthController {
       })
       .catch(next);
   }
+  //GET registered course
+  getRegisteredCourse(req, res, next) {
+    User.findById({ _id: req.params._id })
+      .select('registeredCourses')
+      .then((courses) => {
+        res.status(200).json(courses);
+      })
+      .catch(next);
+  }
   //PUT User
   updateUser(req, res, next) {
     User.updateOne(
