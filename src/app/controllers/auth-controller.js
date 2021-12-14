@@ -132,7 +132,7 @@ class AuthController {
   //PUT User courses
   updateRegisteredCourses(req, res, next) {
     Course.findOne({ _id: req.body.courseId })
-      .then((course) => {
+      .then(() => {
         Course.updateOne(
           { _id: req.body.courseId },
           {
@@ -141,7 +141,7 @@ class AuthController {
             },
           }
         )
-          .then(() => {
+          .then((course) => {
             User.updateOne(
               { _id: req.body.userId },
               {
