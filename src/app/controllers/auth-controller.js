@@ -3,6 +3,7 @@ const Course = require('../models/course.js');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const jwtDecode = require('jwt-decode');
+const _ = require('lodash');
 class AuthController {
   //Register User
   registerUser(req, res, next) {
@@ -103,6 +104,21 @@ class AuthController {
       .select('registeredCourses')
       .then((courses) => {
         res.status(200).json(courses);
+      })
+      .catch(next);
+  }
+  getPopularCourseWithLogin(req, res, next) {
+    const registeredCourses = req.body.registeredCourses;
+    Course.find()
+      .then((course) => {
+        const newArray = _.filter(course, (n) => {
+          return !_.some(registeredCourses, (kn) => {
+            return n.slug === kn.slug;
+          });
+        });
+        res
+          .status(200)
+          .json(_.slice(_.orderBy(newArray, 'members', 'desc'), 0, 9));
       })
       .catch(next);
   }

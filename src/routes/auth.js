@@ -5,6 +5,7 @@ const authController = require('../app/controllers/auth-controller');
 //nên đưa path trống / xuống dưới cùng để ko bị ăn function tương ứng
 router.post('/register', authController.registerUser);
 router.post('/login', authController.loginUser);
+router.post('/unregister-course', authController.getPopularCourseWithLogin);
 router.put('/:_id', authController.updateUser);
 router.put('/', authController.updateRegisteredCourses);
 router.delete('/:_id', authController.deleteUser);
