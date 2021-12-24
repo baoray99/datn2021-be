@@ -1,9 +1,11 @@
 const User = require('../models/user');
+const Role = require('../models/role');
 const Course = require('../models/course.js');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const jwtDecode = require('jwt-decode');
 const _ = require('lodash');
+const mongoose = require('mongoose');
 class AuthController {
   //Register User
   registerUser(req, res, next) {
@@ -17,6 +19,7 @@ class AuthController {
               res.json({ error: err });
             }
             const newUser = new User({
+              _id: new mongoose.Types.ObjectId(),
               name: req.body.name,
               email: req.body.email,
               password: hashedPass,
@@ -25,6 +28,16 @@ class AuthController {
             newUser
               .save()
               .then((user) => {
+                Role.findByIdAndUpdate(
+                  req.body.role,
+                  {
+                    $push: {
+                      users: user,
+                    },
+                  },
+                  { returnOriginal: false },
+                  (err, doc) => {}
+                );
                 res.status(200).json({ message: 'Create User successfully!' });
               })
               .catch(next);
@@ -62,9 +75,22 @@ class AuthController {
     const token = req.header('Authorization').replace('Bearer ', '');
     const userDecode = jwtDecode(token);
     User.findById({ _id: userDecode._id })
+      .populate('role', 'name')
       .select(
-        '_id name birthday gender avatar phone bio facebook instagram youtube role'
+        '_id name birthday gender avatar phone bio facebook instagram youtube'
       )
+      .then((user) => {
+        res.status(200).json(user);
+      })
+      .catch(next);
+  }
+  //GET my teaching course
+  getTeachingCourse(req, res, next) {
+    const token = req.header('Authorization').replace('Bearer ', '');
+    const userDecode = jwtDecode(token);
+    User.findById({ _id: userDecode._id })
+      .populate('teachingCourse', 'name')
+      .select('name')
       .then((user) => {
         res.status(200).json(user);
       })
@@ -86,24 +112,15 @@ class AuthController {
       })
       .catch(next);
   }
-  //GET Users by RoleId
-  getUsersByRole(req, res, next) {
-    const role = req.query.role;
-    User.find({ role: role })
-      .select(
-        '_id name birthday gender avatar phone bio facebook instagram youtube role'
-      )
-      .then((users) => {
-        res.status(200).json(users);
-      })
-      .catch(next);
-  }
   //GET registered course
   getRegisteredCourse(req, res, next) {
-    User.findById({ _id: req.params._id })
-      .select('registeredCourses')
-      .then((courses) => {
-        res.status(200).json(courses);
+    const token = req.header('Authorization').replace('Bearer ', '');
+    const userDecode = jwtDecode(token);
+    User.findById({ _id: userDecode._id })
+      .populate('registeredCourse', 'name')
+      .select('name')
+      .then((user) => {
+        res.status(200).json(user);
       })
       .catch(next);
   }
@@ -118,7 +135,7 @@ class AuthController {
         });
         res
           .status(200)
-          .json(_.slice(_.orderBy(newArray, 'members', 'desc'), 0, 9));
+          .json(_.slice(_.orderBy(newArray, 'totalMember', 'desc'), 0, 9));
       })
       .catch(next);
   }
@@ -147,27 +164,21 @@ class AuthController {
   }
   //PUT User courses
   updateRegisteredCourses(req, res, next) {
-    Course.findOne({ _id: req.body.courseId })
-      .then(() => {
-        Course.findByIdAndUpdate(
-          req.body.courseId,
-          { $inc: { members: 1 } },
+    Course.findByIdAndUpdate(
+      req.body.courseId,
+      { $inc: { totalMember: 1 } },
+      { returnOriginal: false },
+      (err, doc) => {
+        User.findByIdAndUpdate(
+          req.body.userId,
+          { $push: { registeredCourse: doc } },
           { returnOriginal: false },
-          (err, doc) => {
-            User.updateOne(
-              { _id: req.body.userId },
-              {
-                $push: {
-                  registeredCourses: doc,
-                },
-              }
-            )
-              .then((response) => {
-                res.status(200).json(response);
-              })
-              .catch(next);
-          }
+          (err, doc2) => {}
         );
+      }
+    )
+      .then((course) => {
+        res.status(200).json(course);
       })
       .catch(next);
   }

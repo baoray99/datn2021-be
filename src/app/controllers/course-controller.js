@@ -1,6 +1,7 @@
 const Course = require('../models/course');
 const User = require('../models/user');
 const Lession = require('../models/lession');
+const mongoose = require('mongoose');
 
 class CourseController {
   //GET all Courses
@@ -30,6 +31,7 @@ class CourseController {
   //GET Course by slug
   getCourseBySlug(req, res, next) {
     Course.findOne({ slug: req.params.slug })
+      .populate('belongTo')
       .then((course) => {
         res.status(200).json(course);
       })
@@ -39,7 +41,7 @@ class CourseController {
   getPopularCourse(req, res, next) {
     const query = {};
     // sort in descending (-1) order by length
-    const sort = { members: -1 };
+    const sort = { totalMember: -1 };
     const limit = 10;
     Course.find(query)
       .sort(sort)
@@ -51,26 +53,27 @@ class CourseController {
   }
   //POST a new Course
   createCourse(req, res, next) {
-    const user = {};
-    User.findById({ _id: req.body.belongToId })
-      .select(
-        'name birthday gender avatar bio phone facebook instagram youtube'
-      )
-      .then((user) => {
-        user = user;
-        const newCourse = new Course({
-          belongToId: req.body.belongToId,
-          belongTo: user,
-          name: req.body.name,
-          description: req.body.description,
-          image: req.body.image,
-        });
-        newCourse
-          .save()
-          .then((course) => {
-            res.status(200).json(course);
-          })
-          .catch(next);
+    const newCourse = new Course({
+      _id: new mongoose.Types.ObjectId(),
+      author: req.body.author,
+      name: req.body.name,
+      description: req.body.description,
+      image: req.body.image,
+    });
+    newCourse
+      .save()
+      .then((course) => {
+        User.findByIdAndUpdate(
+          req.body.author,
+          {
+            $push: {
+              teachingCourse: course,
+            },
+          },
+          { returnOriginal: false },
+          (err, doc) => {}
+        );
+        res.status(200).json(course);
       })
       .catch(next);
   }

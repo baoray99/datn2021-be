@@ -4,8 +4,8 @@ const slug = require('mongoose-slug-generator');
 mongoose.plugin(slug);
 const courseSchema = new Schema(
   {
-    belongToId: { type: String, required: true },
-    belongTo: { type: Object, required: true },
+    _id: Schema.Types.ObjectId,
+    author: { type: Schema.Types.ObjectId, ref: 'User' },
     name: { type: String, required: true },
     description: { type: String, required: false },
     image: {
@@ -20,7 +20,11 @@ const courseSchema = new Schema(
       unique: true,
     } /* unique tạo ra duy nhất 1 slug và ko để trùng*/,
     rating: { type: Number, required: false, default: 0 },
-    members: { type: Number, required: false, default: 0 },
+    totalMember: { type: Number, required: false, default: 0 },
+    members: [{ type: Schema.Types.ObjectId, ref: 'User', required: false }],
+    lessions: [
+      { type: Schema.Types.ObjectId, ref: 'Lession', required: false },
+    ],
   },
   { timestamps: true }
 );
