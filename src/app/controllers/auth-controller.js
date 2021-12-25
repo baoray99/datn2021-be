@@ -89,7 +89,7 @@ class AuthController {
     const token = req.header('Authorization').replace('Bearer ', '');
     const userDecode = jwtDecode(token);
     User.findById({ _id: userDecode._id })
-      .populate('teachingCourse', 'name')
+      .populate('teachingCourse')
       .select('name')
       .then((user) => {
         res.status(200).json(user);
@@ -117,7 +117,7 @@ class AuthController {
     const token = req.header('Authorization').replace('Bearer ', '');
     const userDecode = jwtDecode(token);
     User.findById({ _id: userDecode._id })
-      .populate('registeredCourse', 'name')
+      .populate('registeredCourse')
       .select('name')
       .then((user) => {
         res.status(200).json(user);
