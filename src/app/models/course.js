@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const slug = require('mongoose-slug-generator');
+const slug = require('mongoose-slug-updater');
 mongoose.plugin(slug);
 const courseSchema = new Schema(
   {
@@ -18,6 +18,13 @@ const courseSchema = new Schema(
       type: String,
       slug: 'name',
       unique: true,
+      slugOn: {
+        save: true,
+        update: true,
+        updateOne: true,
+        updateMany: true,
+        findOneAndUpdate: true,
+      },
     } /* unique tạo ra duy nhất 1 slug và ko để trùng*/,
     rating: { type: Number, required: false, default: 0 },
     totalMember: { type: Number, required: false, default: 0 },

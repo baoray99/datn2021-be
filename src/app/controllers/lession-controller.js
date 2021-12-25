@@ -1,5 +1,6 @@
 const Lession = require('../models/lession');
 const Course = require('../models/course');
+const mongoose = require('mongoose');
 class LessionController {
   //GET all Lessions
   getAllLessions(req, res, next) {
@@ -17,33 +18,28 @@ class LessionController {
       })
       .catch(next);
   }
-  //GET Lessions by CourseId
-  getLessionsByCourseId(req, res, next) {
-    Lession.find({ belongToId: req.query.courseId })
-      .then((lessions) => {
-        res.status(200).json(lessions);
-      })
-      .catch(next);
-  }
   //POST new Lession
   createLession(req, res, next) {
-    const course = {};
-    Course.findById({ _id: req.body.belongToId })
-      .select('name desctiption')
-      .then((course) => {
-        course = course;
-        const newLession = new Lession({
-          belongToId: req.body.belongToId,
-          belongTo: course,
-          name: req.body.name,
-          videoLink: req.body.videoLink,
-        });
-        newLession
-          .save()
-          .then((lession) => {
-            res.status(200).json(lession);
-          })
-          .catch(next);
+    const newLession = new Lession({
+      _id: new mongoose.Types.ObjectId(),
+      belongTo: req.body.courseId,
+      name: req.body.name,
+      idVideo: req.body.idVideo,
+    });
+    newLession
+      .save()
+      .then((lession) => {
+        Course.findByIdAndUpdate(
+          req.body.courseId,
+          {
+            $push: {
+              lessions: lession,
+            },
+          },
+          { returnOriginal: false },
+          (err, doc) => {}
+        );
+        res.status(200).json(lession);
       })
       .catch(next);
   }
@@ -54,7 +50,7 @@ class LessionController {
       {
         $set: {
           name: req.body.name,
-          videoLink: req.body.videoLink,
+          idVideo: req.body.idVideo,
         },
       }
     )

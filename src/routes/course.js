@@ -12,7 +12,6 @@ router.delete('/:_id', courseController.deleteCourse);
 router.get('/popular', courseController.getPopularCourse);
 router.get('/:slug/comments', commentController.getCommentsByLessionId);
 router.get('/:slug', courseController.getCourseBySlug);
-router.get('/teacher/:teacherId', courseController.getCourseByTeacherId);
 router.get('/id/:_id', courseController.getCourseById);
 router.get('/', courseController.getAllCourses);
 
