@@ -167,18 +167,17 @@ class AuthController {
     Course.findByIdAndUpdate(
       req.body.courseId,
       { $inc: { totalMember: 1 } },
-      { returnOriginal: false },
-      (err, doc) => {
-        User.findByIdAndUpdate(
-          req.body.userId,
-          { $push: { registeredCourse: doc } },
-          { returnOriginal: false },
-          (err, doc2) => {}
-        );
-      }
+      { returnOriginal: false }
     )
       .then((course) => {
-        res.status(200).json(course);
+        User.findByIdAndUpdate(
+          req.body.userId,
+          { $push: { registeredCourse: course } },
+          { returnOriginal: false }
+        );
+        res
+          .status(200)
+          .json('This course has added to your registered courses!');
       })
       .catch(next);
   }
