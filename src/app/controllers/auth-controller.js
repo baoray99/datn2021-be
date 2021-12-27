@@ -173,7 +173,8 @@ class AuthController {
         User.findByIdAndUpdate(
           req.body.userId,
           { $push: { registeredCourse: course } },
-          { returnOriginal: false }
+          { returnOriginal: false },
+          (err, doc) => {}
         );
         res
           .status(200)
