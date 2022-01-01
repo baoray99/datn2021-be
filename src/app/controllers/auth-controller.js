@@ -1,6 +1,7 @@
 const User = require('../models/user');
 const Role = require('../models/role');
 const Course = require('../models/course.js');
+const Lession = require('../models/comment');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const jwtDecode = require('jwt-decode');

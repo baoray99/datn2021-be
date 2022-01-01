@@ -26,6 +26,9 @@ const userSchema = new Schema(
     email: { type: String, required: true },
     password: { type: String, required: true },
     role: { type: Schema.Types.ObjectId, ref: 'Role', required: true },
+    comments: [
+      { type: Schema.Types.ObjectId, ref: 'Comment', required: false },
+    ],
   },
   { timestamps: true }
 );

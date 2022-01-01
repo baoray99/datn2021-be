@@ -13,6 +13,7 @@ class LessionController {
   //GET Lession by Id
   getLessionById(req, res, next) {
     Lession.findById({ _id: req.params._id })
+      .populate('comments')
       .then((lession) => {
         res.status(200).json(lession);
       })

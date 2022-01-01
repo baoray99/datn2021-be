@@ -4,10 +4,9 @@ const Schema = mongoose.Schema;
 // mongoose.plugin(slug);
 const commentSchema = new Schema(
   {
-    userId: { type: String, required: true },
-    user: { type: Object, required: true },
-    belongToId: { type: String, required: true },
-    belongTo: { type: Object, required: true },
+    _id: Schema.Types.ObjectId,
+    user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    belongTo: { type: Schema.Types.ObjectId, ref: 'Lession', required: true },
     content: { type: String, required: true },
   },
   { timestamps: true }
