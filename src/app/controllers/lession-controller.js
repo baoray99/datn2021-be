@@ -1,6 +1,7 @@
 const Lession = require('../models/lession');
 const Course = require('../models/course');
 const mongoose = require('mongoose');
+const { populate } = require('../models/lession');
 class LessionController {
   //GET all Lessions
   getAllLessions(req, res, next) {
@@ -13,7 +14,14 @@ class LessionController {
   //GET Lession by Id
   getLessionById(req, res, next) {
     Lession.findById({ _id: req.params._id })
-      .populate('comments')
+      .populate({
+        path: 'comments',
+        populate: {
+          path: 'user',
+          model: 'User',
+          select: 'name avatar',
+        },
+      })
       .then((lession) => {
         res.status(200).json(lession);
       })
