@@ -1,4 +1,4 @@
-//access var in.env
+//access variables in.env
 require('dotenv').config();
 
 //database
@@ -11,6 +11,8 @@ const compression = require('compression');
 const cors = require('cors');
 const port = process.env.PORT;
 const route = require('./routes');
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
 
 //fix cors
 app.use(cors());
@@ -31,7 +33,11 @@ app.use(
 app.use(express.json());
 //Init route
 route(app);
-
+io.on('connection', (socket) => {
+  socket.on('chat message', (msg) => {
+    io.emit('chat message', msg);
+  });
+});
 //App run
 app.listen(port, () => {
   console.log(`App is listening at port:${port}`);
