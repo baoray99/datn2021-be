@@ -1,1 +1,0 @@
-web: gunicorn src/app/controllers/recommend:app --log-file -

@@ -11,10 +11,9 @@ import neattext.functions as nfx
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity, linear_kernel
 
-courses = requests.get("https://letslearnbackend.herokuapp.com/courses").json()
-
+courses = requests.get("http://localhost:3000/courses").json()
 # now we will open a file for writing
-data_file = open(path.abspath('src/app/data/data_file.csv'),
+data_file = open(path.abspath('src/data/data_file.csv'),
                  'w', newline='', encoding="utf-8")
 # create the csv writer object
 csv_writer = csv.writer(data_file)
@@ -35,7 +34,7 @@ for course in courses:
 data_file.close()
 # Load our dataset
 df = pd.read_csv(
-    path.abspath('src/app/data/data_file.csv'), encoding='utf-8')
+    path.abspath('src/data/data_file.csv'), encoding='utf-8')
 
 # Clean Text:stopwords,special charac
 df['clean_name'] = df['name'].apply(nfx.remove_stopwords)
