@@ -9,6 +9,7 @@ const express = require('express');
 const app = require('express')();
 const port = process.env.PORT;
 const route = require('./routes');
+const Course = require('./app/models/course');
 
 //cors
 const cors = require('cors');
@@ -47,6 +48,29 @@ app.use(express.json());
 //Init route
 route(app);
 
+//call chatbot
+app.get('/chat', (req, res) => {
+  const chatbot = spawn('python', [
+    path.resolve('src/app/controllers/chatbot.py'),
+  ]);
+  chatbot.stdout.on('data', (data) => {
+    console.log(data.toString());
+    res.status(200).json({ message: 'chatbot actived' });
+  });
+});
+
+//search
+app.get('/search/:course', function (req, res) {
+  var regex = new RegExp(req.params.course, 'i');
+  Course.find({ name: regex })
+    .then((courses) => {
+      res.status(200).json(courses);
+    })
+    .catch((error) => {
+      res.json(error);
+    });
+});
+
 //init socket
 io.on('connection', (socket) => {
   socket.on('join', (data) => {
@@ -58,7 +82,6 @@ io.on('connection', (socket) => {
     socket.broadcast.to(data.room).emit('user left');
   });
   socket.on('message', (data) => {
-    
     io.in(data.room).emit('new message', {
       user: data.user,
       message: data.message,
