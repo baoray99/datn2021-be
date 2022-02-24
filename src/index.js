@@ -22,7 +22,7 @@ const server = require('http').Server(app);
 const io = require('socket.io')(server);
 
 //python
-const spawn = require('child_process').spawn;
+const { spawn, exec } = require('child_process');
 const path = require('path');
 
 //fix cors
@@ -52,17 +52,24 @@ route(app);
 app.get('/chat', (req, res) => {
   const chatbot = spawn('python', [
     path.resolve('src/app/controllers/chatbot.py'),
+    {
+      stdio: 'ignore',
+      detached: true,
+    },
   ]);
-  chatbot.stdout.on('data', (data) => {
-    console.log(data.toString());
-    res.status(200).json({ message: 'chatbot actived' });
-  });
+
+  // chatbot.stdout.on('data', (data) => {
+  //   console.log(data.toString());
+  // });
+
+  return;
 });
 
 //search
 app.get('/search/:course', function (req, res) {
   var regex = new RegExp(req.params.course, 'i');
   Course.find({ name: regex })
+    .select('name')
     .then((courses) => {
       res.status(200).json(courses);
     })
@@ -82,7 +89,7 @@ io.on('connection', (socket) => {
     socket.broadcast.to(data.room).emit('user left');
   });
   socket.on('message', (data) => {
-    io.in(data.room).emit('new message', {
+    io.in(data.room).emit('new_message', {
       user: data.user,
       message: data.message,
     });

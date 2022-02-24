@@ -1,86 +1,53 @@
-from os import path
-import nltk
-import numpy as np
-import random
-import string # to process standard python strings
+from chatterbot import ChatBot
+from chatterbot.trainers import ChatterBotCorpusTrainer
+from chatterbot.trainers import ListTrainer
+import requests
+import json
+# Create a new trainer for the chatbot
+chatbot = ChatBot(name='Ron Obvious')
 
-nltk.download('popular', quiet=True)  # for downloading packages
-# nltk.download('punkt') # first-time use only
-# nltk.download('wordnet') # first-time use only
-
-f = open(path.abspath('src/data/chat.txt'),
-         'r', encoding="utf-8", errors='ignore')
-raw=f.read()
-
-raw=raw.lower()# converts to lowercase
-
-nltk.download('punkt') # first-time use only
-nltk.download('wordnet') # first-time use only
-
-sent_tokens = nltk.sent_tokenize(raw)# converts to list of sentences 
-word_tokens = nltk.word_tokenize(raw)# converts to list of words
-
-lemmer = nltk.stem.WordNetLemmatizer()
-#WordNet is a semantically-oriented dictionary of English included in NLTK.
-
-def LemTokens(tokens):
-    return [lemmer.lemmatize(token) for token in tokens]
-remove_punct_dict = dict((ord(punct), None) for punct in string.punctuation)
-def LemNormalize(text):
-    return LemTokens(nltk.word_tokenize(text.lower().translate(remove_punct_dict)))
+# Train the chatbot based on the list chat
+trainer = ListTrainer(chatbot)
 
 
-GREETING_INPUTS = ("hello", "hi", "greetings", "sup", "what's up", "hey",)
-GREETING_RESPONSES = ["hi", "hey", "*nods*", "hi there",
-                      "hello", "I am glad! You are talking to me"]
+trainer.train([
+    'Hi',
+    'Hello',
+    'I need your assistance regarding my order',
+    'Please, Provide me with your order id',
+    'I have a complaint.',
+    'Please elaborate, your concern',
+    'How long it will take to receive an order ?',
+    'An order takes 3-5 Business days to get delivered.',
+    'Okay Thanks',
+    'No Problem! Have a Good Day!',
+    'con cak',
+    'cai lon',
+])
 
 
-def greeting(sentence):
-    for word in sentence.split():
-        if word.lower() in GREETING_INPUTS:
-            return random.choice(GREETING_RESPONSES)
+def listToString(s):
 
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
+    # initialize an empty string
+    str1 = ""
+
+    # traverse in the string
+    for ele in s:
+        str1 += ele
+
+    # return string
+    return str1
 
 
-def response(user_response):
-    robo_response=''
-    sent_tokens.append(user_response)
-
-    TfidfVec = TfidfVectorizer(tokenizer=LemNormalize, stop_words='english')
-    tfidf = TfidfVec.fit_transform(sent_tokens)
-    vals = cosine_similarity(tfidf[-1], tfidf)
-    idx=vals.argsort()[0][-2]
-    flat = vals.flatten()
-    flat.sort()
-    req_tfidf = flat[-2]
-
-    if(req_tfidf==0):
-        robo_response=robo_response+"I am sorry! I don't understand you"
-        return robo_response
+while True:
+    courses = requests.get(
+        "http://localhost:3000/search/html").json()
+    courses = json.dumps(courses, ensure_ascii=False)
+    print(courses)
+    request = input()
+    if (request == 'Bye' or request == 'bye'):
+        print('Bot: Bye')
+        break
     else:
-        robo_response = robo_response+sent_tokens[idx]
-        return robo_response
-
-
-flag=True
-print("ROBO: My name is Robo. I will answer your queries about Chatbots. If you want to exit, type Bye!")
-
-while(flag==True):
-    user_response = input()
-    user_response=user_response.lower()
-    if(user_response!='bye'):
-        if(user_response=='thanks' or user_response=='thank you' ):
-            flag=False
-            print("ROBO: You are welcome..")
-        else:
-            if(greeting(user_response)!=None):
-                print("ROBO: "+greeting(user_response))
-            else:
-                print("ROBO: ",end="")
-                print(response(user_response))
-                sent_tokens.remove(user_response)
-    else:
-        flag=False
-        print("ROBO: Bye! take care..")
+        response = chatbot.get_response(request)
+        print(response.serialize()['text'])
