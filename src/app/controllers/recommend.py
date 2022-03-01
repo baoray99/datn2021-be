@@ -71,10 +71,10 @@ scores = list(enumerate(cosine_sim_mat[idx]))
 sorted_scores = sorted(scores, key=lambda x: x[1], reverse=True)
 
 # Selected Courses Indices
-selected_course_indices = [i[0] for i in sorted_scores[0:]]
+selected_course_indices = [i[0] for i in sorted_scores[1:]]
 
 # Selected Courses Scores
-selected_course_scores = [i[1] for i in sorted_scores[0:]]
+selected_course_scores = [i[1] for i in sorted_scores[1:]]
 
 recommended_result = df.iloc[selected_course_indices]
 

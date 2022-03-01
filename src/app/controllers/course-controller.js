@@ -7,7 +7,6 @@ class CourseController {
   //GET all Courses
   getAllCourses(req, res, next) {
     Course.find()
-      .select('name image slug')
       .then((courses) => {
         res.status(200).json(courses);
       })

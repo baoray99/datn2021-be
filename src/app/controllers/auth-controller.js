@@ -140,6 +140,19 @@ class AuthController {
       })
       .catch(next);
   }
+  getAllCourseWithLogin(req, res, next) {
+    const registeredCourses = req.body.registeredCourses;
+    Course.find()
+      .then((course) => {
+        const newArray = _.filter(course, (n) => {
+          return !_.some(registeredCourses, (kn) => {
+            return n.slug === kn.slug;
+          });
+        });
+        res.status(200).json(newArray);
+      })
+      .catch(next);
+  }
   //PUT User
   updateUser(req, res, next) {
     User.updateOne(

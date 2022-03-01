@@ -10,6 +10,7 @@ const app = require('express')();
 const port = process.env.PORT;
 const route = require('./routes');
 const Course = require('./app/models/course');
+const _ = require('lodash');
 
 //cors
 const cors = require('cors');
@@ -22,7 +23,7 @@ const server = require('http').Server(app);
 const io = require('socket.io')(server);
 
 //python
-const { spawn, exec } = require('child_process');
+const { spawn } = require('child_process');
 const path = require('path');
 
 //fix cors
@@ -49,18 +50,15 @@ app.use(express.json());
 route(app);
 
 //call chatbot
-app.get('/chat', (req, res) => {
+app.post('/chat', (req, res) => {
   const chatbot = spawn('python', [
     path.resolve('src/app/controllers/chatbot.py'),
-    {
-      stdio: 'ignore',
-      detached: true,
-    },
+    req.body.roomId,
   ]);
 
-  // chatbot.stdout.on('data', (data) => {
-  //   console.log(data.toString());
-  // });
+  chatbot.stdout.on('data', (data) => {
+    console.log(data.toString());
+  });
 
   return;
 });
@@ -69,9 +67,11 @@ app.get('/chat', (req, res) => {
 app.get('/search/:course', function (req, res) {
   var regex = new RegExp(req.params.course, 'i');
   Course.find({ name: regex })
-    .select('name')
+    .select('name slug')
     .then((courses) => {
-      res.status(200).json(courses);
+      res
+        .status(200)
+        .json(_.slice(_.orderBy(courses, 'totalMember', 'desc'), 0, 5));
     })
     .catch((error) => {
       res.json(error);
@@ -95,7 +95,7 @@ io.on('connection', (socket) => {
     });
   });
 });
-
+server.setTimeout(60 * 60 * 1000);
 //App run
 server.listen(port, () => {
   console.log(`App is listening at port:${port}`);

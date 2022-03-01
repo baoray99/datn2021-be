@@ -6,6 +6,7 @@ const authController = require('../app/controllers/auth-controller');
 router.post('/register', authController.registerUser);
 router.post('/login', authController.loginUser);
 router.post('/unregister-course', authController.getPopularCourseWithLogin);
+router.post('/all-course-logined', authController.getAllCourseWithLogin);
 router.put('/', authController.updateRegisteredCourses);
 router.put('/:_id', authController.updateUser);
 router.delete('/:_id', authController.deleteUser);
