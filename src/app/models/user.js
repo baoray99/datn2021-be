@@ -17,10 +17,10 @@ const userSchema = new Schema(
     facebook: { type: String, required: false },
     instagram: { type: String, require: false },
     youtube: { type: String, required: false },
-    registeredCourse: [
+    registered_courses: [
       { type: Schema.Types.ObjectId, ref: 'Course', required: false },
     ],
-    teachingCourse: [
+    teaching_courses: [
       { type: Schema.Types.ObjectId, ref: 'Course', required: false },
     ],
     email: { type: String, required: true },

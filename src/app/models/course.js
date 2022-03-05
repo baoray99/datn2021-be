@@ -5,7 +5,7 @@ mongoose.plugin(slug);
 const courseSchema = new Schema(
   {
     _id: Schema.Types.ObjectId,
-    author: { type: Schema.Types.ObjectId, ref: 'User' },
+    user_id: { type: Schema.Types.ObjectId, ref: 'User' },
     name: { type: String, required: true },
     description: { type: String, required: false },
     image: {
@@ -27,11 +27,9 @@ const courseSchema = new Schema(
       },
     } /* unique tạo ra duy nhất 1 slug và ko để trùng*/,
     rating: { type: Number, required: false, default: 0 },
-    totalMember: { type: Number, required: false, default: 0 },
+    total_member: { type: Number, required: false, default: 0 },
     members: [{ type: Schema.Types.ObjectId, ref: 'User', required: false }],
-    lessions: [
-      { type: Schema.Types.ObjectId, ref: 'Lession', required: false },
-    ],
+    lessons: [{ type: Schema.Types.ObjectId, ref: 'Lesson', required: false }],
   },
   { timestamps: true }
 );

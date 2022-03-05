@@ -1,51 +1,29 @@
-const Lession = require('../models/lession');
+const Lesson = require('../models/lesson');
 const User = require('../models/user');
 const Comment = require('../models/comment');
 const mongoose = require('mongoose');
 class CommentController {
   //GET comment by lessionId
-  getCommentsByLessionId(req, res, next) {
-    Comment.find({ belongToId: req.query.lessionId })
+  getCommentsByLessonId(req, res, next) {
+    Comment.find({ lesson_id: req.query.lesson_id })
       .then((comments) => {
         res.status(200).json(comments);
       })
       .catch(next);
   }
   //POST new comment
-  // createComment = async (req, res) => {
-  //   const user = await User.findById({ _id: req.body.userId }).select(
-  //     'name avatar'
-  //   );
-  //   const lession = await Lession.findById({ _id: req.body.belongToId }).select(
-  //     'name'
-  //   );
-  //   try {
-  //     const newComment = await new Comment({
-  //       belongToId: req.body.belongToId,
-  //       belongTo: lession,
-  //       userId: req.body.userId,
-  //       user: user,
-  //       content: req.body.content,
-  //     });
-  //     const saveComment = await newComment.save();
-  //     res.status(200).json(saveComment);
-  //   } catch (error) {
-  //     res.json(error);
-  //   }
-  // };
-  //POST new comment
   createComment(req, res, next) {
     const newComment = new Comment({
       _id: new mongoose.Types.ObjectId(),
-      user: req.body.userId,
-      belongTo: req.body.lessionId,
+      user_id: req.body.userId,
+      lesson_id: req.body.lesson_id,
       content: req.body.content,
     });
     newComment
       .save()
       .then((comment) => {
         User.findByIdAndUpdate(
-          req.body.userId,
+          req.body.user_id,
           {
             $push: {
               comments: comment,
@@ -55,7 +33,7 @@ class CommentController {
           (err, doc) => {}
         );
         Lession.findByIdAndUpdate(
-          req.body.lessionId,
+          req.body.lesson_id,
           {
             $push: {
               comments: comment,

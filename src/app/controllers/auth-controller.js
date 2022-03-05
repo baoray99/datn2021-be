@@ -1,7 +1,6 @@
 const User = require('../models/user');
 const Role = require('../models/role');
 const Course = require('../models/course.js');
-const Lession = require('../models/comment');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const jwtDecode = require('jwt-decode');
@@ -90,7 +89,7 @@ class AuthController {
     const token = req.header('Authorization').replace('Bearer ', '');
     const userDecode = jwtDecode(token);
     User.findById({ _id: userDecode._id })
-      .populate('teachingCourse')
+      .populate('teaching_courses')
       .select('name')
       .then((user) => {
         res.status(200).json(user);
@@ -118,15 +117,15 @@ class AuthController {
     const token = req.header('Authorization').replace('Bearer ', '');
     const userDecode = jwtDecode(token);
     User.findById({ _id: userDecode._id })
-      .populate('registeredCourse')
-      .select('name')
+      .populate('registered_courses')
       .then((user) => {
         res.status(200).json(user);
       })
       .catch(next);
   }
   getPopularCourseWithLogin(req, res, next) {
-    const registeredCourses = req.body.registeredCourses;
+    const registeredCourses = req.body.registered_courses;
+    console.log(registeredCourses);
     Course.find()
       .then((course) => {
         const newArray = _.filter(course, (n) => {
@@ -136,12 +135,12 @@ class AuthController {
         });
         res
           .status(200)
-          .json(_.slice(_.orderBy(newArray, 'totalMember', 'desc'), 0, 9));
+          .json(_.slice(_.orderBy(newArray, 'total_member', 'desc'), 0, 9));
       })
       .catch(next);
   }
   getAllCourseWithLogin(req, res, next) {
-    const registeredCourses = req.body.registeredCourses;
+    const registeredCourses = req.body.registered_courses;
     Course.find()
       .then((course) => {
         const newArray = _.filter(course, (n) => {
@@ -178,12 +177,12 @@ class AuthController {
   }
   //PUT User courses
   updateRegisteredCourses(req, res, next) {
-    User.findById(req.body.userId)
+    User.findById(req.body.user_id)
       .then((user) => {
         Course.findByIdAndUpdate(
-          req.body.courseId,
+          req.body.course_id,
           {
-            $inc: { totalMember: 1 },
+            $inc: { total_member: 1 },
             $push: {
               members: user,
             },
@@ -191,8 +190,8 @@ class AuthController {
           { returnOriginal: false }
         ).then((course) => {
           User.findByIdAndUpdate(
-            req.body.userId,
-            { $push: { registeredCourse: course } },
+            req.body.user_id,
+            { $push: { registered_courses: course } },
             { returnOriginal: false },
             (err, doc) => {}
           );

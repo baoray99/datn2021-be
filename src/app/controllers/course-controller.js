@@ -1,6 +1,6 @@
 const Course = require('../models/course');
 const User = require('../models/user');
-const Lession = require('../models/lession');
+const Lesson = require('../models/lesson');
 const mongoose = require('mongoose');
 
 class CourseController {
@@ -23,7 +23,7 @@ class CourseController {
   //GET Course by slug
   getCourseBySlug(req, res, next) {
     Course.findOne({ slug: req.params.slug })
-      .populate('lessions')
+      .populate('lessons')
       .then((course) => {
         res.status(200).json(course);
       })
@@ -33,7 +33,7 @@ class CourseController {
   getPopularCourse(req, res, next) {
     const query = {};
     // sort in descending (-1) order by length
-    const sort = { totalMember: -1 };
+    const sort = { total_member: -1 };
     const limit = 10;
     Course.find(query)
       .sort(sort)
@@ -47,7 +47,7 @@ class CourseController {
   createCourse(req, res, next) {
     const newCourse = new Course({
       _id: new mongoose.Types.ObjectId(),
-      author: req.body.author,
+      user_id: req.body.user_id,
       name: req.body.name,
       description: req.body.description,
       image: req.body.image,
@@ -56,10 +56,10 @@ class CourseController {
       .save()
       .then((course) => {
         User.findByIdAndUpdate(
-          req.body.author,
+          req.body.user_id,
           {
             $push: {
-              teachingCourse: course,
+              teaching_courses: course,
             },
           },
           { returnOriginal: false },
