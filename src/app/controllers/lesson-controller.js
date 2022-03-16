@@ -2,6 +2,7 @@ const Lesson = require('../models/lesson');
 const Course = require('../models/course');
 const mongoose = require('mongoose');
 const { populate } = require('../models/lesson');
+const Comment = require('../models/comment');
 class LessonController {
   //GET all Lessons
   getAllLessons(req, res, next) {
@@ -72,6 +73,7 @@ class LessonController {
   deleteLesson(req, res, next) {
     Lesson.deleteOne({ _id: req.params._id })
       .then(() => {
+        Comment.deleteMany({ lesson_id: req.params._id }, (err, doc) => {});
         res.status(200).json({ message: 'Delete Lesson successfully!' });
       })
       .catch(next);

@@ -105,6 +105,7 @@ class CourseController {
   deleteCourse(req, res, next) {
     Course.deleteOne({ _id: req.params._id })
       .then(() => {
+        Lesson.deleteMany({ course_id: req.params._id }, (err, doc) => {});
         res.status(200).json({ message: 'Delete Course successfully!' });
       })
       .catch(next);

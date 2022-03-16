@@ -54,13 +54,8 @@ app.post('/chat', (req, res) => {
   const chatbot = spawn('python', [
     path.resolve('src/app/controllers/chatbot.py'),
     req.body.roomId,
-  ]);
-
-  chatbot.stdout.on('data', (data) => {
-    console.log(data.toString());
-  });
-
-  return;
+  ]).unref();
+  res.status(200).json('chatbot activated');
 });
 
 //search

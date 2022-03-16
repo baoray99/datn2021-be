@@ -5,13 +5,7 @@ import requests
 import json
 import sys
 import time
-import os
-from os import path
-# os.remove(path.abspath('database.sqlite3'))
-# os.remove(path.abspath('database.sqlite3-shm'))
-# os.remove(path.abspath('database.sqlite3-wal'))
 
-sio = socketio.Client()
 # Create a new trainer for the chatbot
 chatbot = ChatBot(name='Chatbot')
 # Train the chatbot based on the list chat
@@ -43,6 +37,8 @@ greeting = [
 trainer.train(conversation)
 trainer.train(greeting)
 
+sio = socketio.Client()
+
 
 @ sio.event
 def connect():
@@ -62,24 +58,28 @@ def send_message(msg):
     })
 
 
-COURSE_INPUTS = ("html", "css", "javascript", "nodejs", "php", "python")
+COURSE_INPUTS = ("html", "css", "javascript", "nodejs",
+                 "php", "python", "java", "expressjs")
 
 
 @ sio.event
 def new_message(data):
     if(data['user'] != 'chatbot'):
-        if(data['message'] in COURSE_INPUTS):
+        if(data['message'].lower() in COURSE_INPUTS):
             courses = json.dumps(requests.get(
                 "http://localhost:3000/search/" + data['message']).json(), ensure_ascii=False)
             if(courses == '[]'):
-                trainer.train(
-                    [data['message'], 'Xin lỗi, hiện tại bên mình chưa có khóa học nào liên quan tới từ khóa bạn nhập ạ @@'])
-                response = chatbot.get_response(data['message'])
-                send_message(response.serialize()['text'])
+                # trainer.train(
+                #     [data['message'], 'Xin lỗi, hiện tại bên mình chưa có khóa học nào liên quan tới từ khóa bạn nhập ạ @@'])
+                # response = chatbot.get_response(data['message'])
+                # send_message(response.serialize()['text'])
+                send_message(
+                    'Xin lỗi, hiện tại bên mình chưa có khóa học nào liên quan tới từ khóa bạn nhập ạ @@')
             else:
-                trainer.train([data['message'], courses])
-                response = chatbot.get_response(data['message'])
-                send_message(response.serialize()['text'])
+                # trainer.train([data['message'], courses])
+                # response = chatbot.get_response(data['message'])
+                # send_message(response.serialize()['text'])
+                send_message(courses)
         else:
             response = chatbot.get_response(data['message'])
             send_message(response.serialize()['text'])
@@ -95,4 +95,3 @@ sio.connect('http://localhost:3000')
 sio.emit('join', {'user': 'chatbot', 'room': sys.argv[1]})
 send_message(
     'Xin chào, mình là eLearn, mình có thể giúp bạn tìm khoá học bạn muốn, nếu muốn dừng cuộc trò chuyện này, hãy gõ "bye", xin cảm ơn.')
-sio.wait()

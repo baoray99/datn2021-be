@@ -125,7 +125,6 @@ class AuthController {
   }
   getPopularCourseWithLogin(req, res, next) {
     const registeredCourses = req.body.registered_courses;
-    console.log(registeredCourses);
     Course.find()
       .then((course) => {
         const newArray = _.filter(course, (n) => {
