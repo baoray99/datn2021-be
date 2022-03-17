@@ -29,6 +29,8 @@ conversation = ["Hi",
                 "Bạn nên học về Python, JavaScipt, C#, C++, ... sau đó có thể học thêm 3 Framework nổi tiếng là Angular, ReactJs hoặc VueJs bạn nhé, đừng quên gõ 'html' hoặc 'css',..., mình sẽ tìm giúp bạn ^^",
                 "Tôi muốn học về cơ sở dữ liệu",
                 "Bạn nên học về Python, SQL, R, C#, ..., đừng quên gõ 'html' hoặc 'css',..., mình sẽ tìm giúp bạn ^^",
+                "Tôi muốn học về AI",
+                "Bạn nên học về Python, Java, Lisp, C++, ..., đừng quên gõ 'html' hoặc 'css',..., mình sẽ tìm giúp bạn ^^",
                 ]
 greeting = [
     "Hello",

@@ -15,7 +15,7 @@ class CommentController {
   createComment(req, res, next) {
     const newComment = new Comment({
       _id: new mongoose.Types.ObjectId(),
-      user_id: req.body.userId,
+      user_id: req.body.user_id,
       lesson_id: req.body.lesson_id,
       content: req.body.content,
     });
@@ -32,7 +32,7 @@ class CommentController {
           { returnOriginal: false },
           (err, doc) => {}
         );
-        Lession.findByIdAndUpdate(
+        Lesson.findByIdAndUpdate(
           req.body.lesson_id,
           {
             $push: {

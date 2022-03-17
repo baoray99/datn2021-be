@@ -18,7 +18,7 @@ class LessonController {
       .populate({
         path: 'comments',
         populate: {
-          path: 'user',
+          path: 'user_id',
           model: 'User',
           select: 'name avatar',
         },
