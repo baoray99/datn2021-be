@@ -11,33 +11,40 @@ chatbot = ChatBot(name='Chatbot')
 # Train the chatbot based on the list chat
 trainer = ListTrainer(chatbot)
 
-conversation = ["Hi",
-                "Xin chào, bạn muốn học khóa học liên quan tới gì? Ví dụ: 'html','css',...",
-                "Bạn khỏe không",
-                "Tôi rất khỏe và luôn sẵn sàng hỗ trợ bạn ^^",
-                "Ai đã tạo ra bạn",
-                "Một sinh viên Bách Khoa đã tạo ra mình đó ^^",
-                "Bye",
-                "Tạm biệt bạn, chúc bạn học tốt, để khởi động lại mình, hãy tắt và mở box chat 1 lần nữa :)))))",
-                "Tôi muốn học về web",
-                "Bạn nên học về HTML, CSS, JavaScript, sau đó có thể học thêm 3 Framework nổi tiếng là Angular, ReactJs hoặc VueJs bạn nhé, đừng quên gõ 'html' hoặc 'css',..., mình sẽ tìm giúp bạn ^^",
-                "Tôi muốn học về Back-end",
-                "Bạn nên học về Php, Node.js, Golang, Python, ExpressJs, ..., đừng quên gõ 'html' hoặc 'css', ..., mình sẽ tìm giúp bạn ^^",
-                "Tôi muốn học về data sience",
-                "Bạn nên học về Python, Java, SQL, Scala, ..., đừng quên gõ 'html' hoặc 'css',..., mình sẽ tìm giúp bạn ^^",
-                "Tôi muốn học về game",
-                "Bạn nên học về Python, JavaScipt, C#, C++, ... sau đó có thể học thêm 3 Framework nổi tiếng là Angular, ReactJs hoặc VueJs bạn nhé, đừng quên gõ 'html' hoặc 'css',..., mình sẽ tìm giúp bạn ^^",
-                "Tôi muốn học về cơ sở dữ liệu",
-                "Bạn nên học về Python, SQL, R, C#, ..., đừng quên gõ 'html' hoặc 'css',..., mình sẽ tìm giúp bạn ^^",
-                "Tôi muốn học về AI",
-                "Bạn nên học về Python, Java, Lisp, C++, ..., đừng quên gõ 'html' hoặc 'css',..., mình sẽ tìm giúp bạn ^^",
-                ]
-greeting = [
+conversation = [
+    "Bạn khỏe không",
+    "Tôi rất khỏe và luôn sẵn sàng hỗ trợ bạn ^^",
+    "Ai đã tạo ra bạn",
+    "Một sinh viên Bách Khoa đã tạo ra mình đó ^^",
+    "Bye",
+    "Tạm biệt bạn, chúc bạn học tốt, để khởi động lại mình, hãy tắt và mở box chat 1 lần nữa :)))))",
+    "Tôi muốn học về web",
+    "Bạn nên học về HTML, CSS, JavaScript, sau đó có thể học thêm 3 Framework nổi tiếng là Angular, ReactJs hoặc VueJs bạn nhé, đừng quên gõ 'html' hoặc 'css',..., mình sẽ tìm giúp bạn ^^",
+    "Tôi muốn học về Back-end",
+    "Bạn nên học về Php, Node.js, Golang, Python, ExpressJs, ..., đừng quên gõ 'html' hoặc 'css', ..., mình sẽ tìm giúp bạn ^^",
+    "Tôi muốn học về data sience",
+    "Bạn nên học về Python, Java, SQL, Scala, ..., đừng quên gõ 'html' hoặc 'css',..., mình sẽ tìm giúp bạn ^^",
+    "Tôi muốn học về game",
+    "Bạn nên học về Python, JavaScipt, C#, C++, ... đừng quên gõ 'html' hoặc 'css',..., mình sẽ tìm giúp bạn ^^",
+    "Tôi muốn học về cơ sở dữ liệu",
+    "Bạn nên học về Python, SQL, R, C#, ..., đừng quên gõ 'html' hoặc 'css',..., mình sẽ tìm giúp bạn ^^",
+    "Tôi muốn học về AI",
+    "Bạn nên học về Python, Java, Lisp, C++, ..., đừng quên gõ 'html' hoặc 'css',..., mình sẽ tìm giúp bạn ^^",
+]
+greeting_1 = [
     "Hello",
     "Xin chào, bạn muốn học khóa học liên quan tới gì? Ví dụ: 'html','css',...",
 ]
+greeting_2 = [
+    "Hi",
+    "Xin chào, bạn muốn học khóa học liên quan tới gì? Ví dụ: 'html','css',...",
+]
+greeting_3=[
+    "Xin chào",
+    "Xin chào, bạn muốn học khóa học liên quan tới gì? Ví dụ: 'html','css',...",
+]
 trainer.train(conversation)
-trainer.train(greeting)
+trainer.train(greeting_1)
 
 sio = socketio.Client()
 
@@ -61,7 +68,7 @@ def send_message(msg):
 
 
 COURSE_INPUTS = ("html", "css", "javascript", "nodejs",
-                 "php", "python", "java", "expressjs")
+                 "php", "python", "java", "expressjs", "sql", "c++", "c#", "r")
 
 
 @ sio.event
